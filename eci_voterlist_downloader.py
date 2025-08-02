@@ -1,4 +1,4 @@
-''' Use sample code logic mainly
+''' 
 Ask for state
 Ask for District
 Ask for Assembly Consitituency using sample code logic
@@ -184,14 +184,9 @@ def download_pdfs(bool_is_supplement,pdf_url,state_id,district_id,assembly_id,pd
         "applicationname": "VSP",
         "channelidobo": "VSP",
         "platform-type": "ECIWEB",
-        # If required, put real tokens here (don't send "null")
-        # "atkn_bnd": "<ACCESS_TOKEN>",
-        # "rtkn_bnd": "<REFRESH_TOKEN>",
     }
     response = requests.post(pdf_url, json = payload, headers= headers)
-    # print("Downloading pdf code:" ,response.status_code)
 
-    # print(response.json())
     if response.ok:
         try:
             dir_path = os.path.join(output_folder, state_name, district_name, assembly_name)
@@ -222,20 +217,23 @@ try:
 except OSError as e:
     print(f"Error creating folder {folder_name}: {e}. Please try again.")
 
-state_id,state_name = state_selection()
-district_id,district_name = district_selection(state_id)
+def main():
+    state_id,state_name = state_selection()
+    district_id,district_name = district_selection(state_id)
 
-assembly_id,assembly_name = assembly_selection(state_id,district_id)
-language_id = language_selection(state_id,district_id, assembly_id)
+    assembly_id,assembly_name = assembly_selection(state_id,district_id)
+    language_id = language_selection(state_id,district_id, assembly_id)
 
 
-pdf_parts  = get_pdf_parts() #returns a list
-pdf_url,pdf_choice = get_pdf_url()
-bool_is_supplement = False
-if pdf_choice==3:
-    bool_is_supplement = True
+    pdf_parts  = get_pdf_parts() #returns a list
+    pdf_url,pdf_choice = get_pdf_url()
+    bool_is_supplement = False
+    if pdf_choice==3:
+        bool_is_supplement = True
 
-captcha_id,captcha_text = download_and_solve_captcha()
-print("The captcha is: ",captcha_text)
+    captcha_id,captcha_text = download_and_solve_captcha()
+    print("The captcha is: ",captcha_text)
 
-download_pdfs(bool_is_supplement,pdf_url,state_id,district_id, assembly_id, pdf_parts, captcha_text, captcha_id, language_id)
+    download_pdfs(bool_is_supplement,pdf_url,state_id,district_id, assembly_id, pdf_parts, captcha_text, captcha_id, language_id)
+
+main()
